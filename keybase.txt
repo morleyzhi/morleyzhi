@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/morley
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://mo.rley.co
+  * I am morley (https://keybase.io/morley) on keybase.
+  * I have a public key ASAFOPCVynqeErUSQwiwEfsubD0Z7luKX1jKwI8oP8mXewo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101eb8802c1962beb41aa53d51be42f9c1270d8a036dc53d3027f00c04514b16cca0a",
+      "host": "keybase.io",
+      "kid": "01200538f095ca7a9e12b5124308b011fb2e6c3d19ee5b8a5f58cac08f283fc9977b0a",
+      "uid": "30739bac38e225bcb97a80125aa89d00",
+      "username": "morley"
+    },
+    "merkle_root": {
+      "ctime": 1524928616,
+      "hash": "169b448f9b83c35a7c0bf31a7306996c4095cab6e350dc2851eda259a07e67e1673e2731b9aeffd981c3ec20087e5e82869603b022b7c764bbd092da6d5ec507",
+      "hash_meta": "dd2d9b13363824877c49a3263ddf3dd2590cb7a5720519fa9369f24f6966f01f",
+      "seqno": 2453876
+    },
+    "service": {
+      "entropy": "Sb8GlkUxHEkZoscGUmahbVWl",
+      "hostname": "mo.rley.co",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "1.0.47"
+  },
+  "ctime": 1524928622,
+  "expire_in": 504576000,
+  "prev": "e220e733ea077c5ba45a4d03e4384c59e687a3b7b821a2c61323dc6fec37e320",
+  "seqno": 51,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgBTjwlcp6nhK1EkMIsBH7Lmw9Ge5bil9YysCPKD/Jl3sKp3BheWxvYWTESpcCM8Qg4iDnM+oHfFukWk0D5DhMWeaHo7e4IaLGEyPcb+w34yDEIEeSbO4dZ8gA1MXIsg2zR7fdCcHXwGD0XZ27f1lkhthHAgHCo3NpZ8RA6szhBj4RQcYDEvttIZeWublBLdITIlcegLYhodrg/HfHBQEFWFbI8EBk2v3DiaBXixjsNh1KsjoYGY9P13NzAqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIJh5/tyZQ3zrR6Qj3CKfu8uT/vxpaTirZCpqIpwMoJX7o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/morley
+
+==================================================================
