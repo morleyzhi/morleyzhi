@@ -30,6 +30,7 @@
         --color-background: #fbf9f6;
         --color-gray: #343e47;
         --color-secondary: #df3e06;
+        --color-secondary-light: #ff6b36;
         --color-primary: #017ab8;
         --color-primary-light: #3cabe5;
       }
@@ -76,9 +77,14 @@
         padding: 0 0 50px;
       }
 
-      strong {
+      strong,
+      strong a {
         font-weight: 400;
         color: var(--color-secondary);
+      }
+
+      strong a:hover {
+        color: var(--color-secondary-light);
       }
 
       a {
@@ -181,7 +187,7 @@
 
       <h1>
         That’s it for
-        <strong> mo.rley.co.</strong>
+        <strong><a href="https://mo.rley.co">mo.rley.co.</a></strong>
       </h1>
     </div>
   </body>
