@@ -1,2 +1,5 @@
 /.well-known/stellar.toml
   Access-Control-Allow-Origin: *
+
+/allowlist.txt
+  Access-Control-Allow-Origin: *
