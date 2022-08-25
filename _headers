@@ -3,3 +3,6 @@
 
 /allowlist.txt
   Access-Control-Allow-Origin: *
+
+/allowlist_2.1mb.txt
+  Access-Control-Allow-Origin: *
