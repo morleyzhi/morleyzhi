@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Cat Food Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --kraft: #e8dcc8;
+    --terracotta: #c4654a;
+    --terracotta-soft: #d4816a;
+    --brown: #5c3d2e;
+    --brown-light: #8b6b56;
+    --green: #5a7a5a;
+    --green-soft: #7a9a7a;
+    --amber: #d4a653;
+    --text: #3d2b1f;
+    --text-muted: #6b5b4b;
+    --shadow: rgba(92, 61, 46, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html { font-size: 18px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(196, 101, 74, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(90, 122, 90, 0.06) 0%, transparent 60%);
+  }
+
+  /* Subtle grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .container {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 6rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-top: 0.5rem;
+  }
+
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: var(--brown);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  header h1 span {
+    display: block;
+    font-size: 0.65em;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--terracotta-soft);
+    margin-top: 0.15rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* Decorative divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--kraft);
+  }
+  .divider-icon {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  /* Input card */
+  .card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px var(--shadow), 0 4px 12px var(--shadow);
+    border: 1px solid rgba(232, 220, 200, 0.6);
+  }
+
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--brown);
+    margin-bottom: 1rem;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .input-group.full { flex: 1 1 100%; }
+
+  label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  input[type="number"] {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1.5px solid var(--kraft);
+    border-radius: 0.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  input[type="number"]:focus {
+    outline: none;
+    border-color: var(--terracotta-soft);
+    box-shadow: 0 0 0 3px rgba(196, 101, 74, 0.1);
+  }
+
+  /* Kcal input mode toggle */
+  .kcal-mode-toggle {
+    display: flex;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1.5px solid var(--kraft);
+    margin-bottom: 0.75rem;
+  }
+  .kcal-mode-toggle button {
+    flex: 1;
+    padding: 0.45rem 0.25rem;
+    border: none;
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .kcal-mode-toggle button.active {
+    background: var(--terracotta);
+    color: white;
+  }
+
+  /* Results */
+  .results {
+    margin-top: 1.5rem;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .results.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .new-food-summary {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px var(--shadow), 0 4px 12px var(--shadow);
+    border: 1px solid rgba(232, 220, 200, 0.6);
+    margin-bottom: 1rem;
+  }
+
+  .summary-stats {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .stat {
+    flex: 1;
+    background: var(--cream);
+    border-radius: 0.5rem;
+    padding: 0.6rem;
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--brown);
+  }
+  .stat-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+  }
+
+  /* Match cards */
+  .match-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 3px var(--shadow), 0 4px 12px var(--shadow);
+    border: 1px solid rgba(232, 220, 200, 0.6);
+    margin-bottom: 0.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .match-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+  }
+  .match-card.exact::before { background: var(--green); }
+  .match-card.close::before { background: var(--amber); }
+  .match-card.far::before { background: var(--terracotta-soft); }
+
+  .match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+
+  .match-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--brown);
+  }
+
+  .match-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+  }
+  .match-card.exact .match-badge { background: rgba(90, 122, 90, 0.12); color: var(--green); }
+  .match-card.close .match-badge { background: rgba(212, 166, 83, 0.15); color: #a07d30; }
+  .match-card.far .match-badge { background: rgba(196, 101, 74, 0.1); color: var(--terracotta); }
+
+  .match-detail {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.15rem;
+  }
+  .match-detail strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .match-verdict {
+    margin-top: 0.6rem;
+    font-size: 0.75rem;
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.4rem;
+    background: var(--cream);
+  }
+  .match-card.exact .match-verdict { color: var(--green); }
+  .match-card.close .match-verdict { color: #a07d30; }
+  .match-card.far .match-verdict { color: var(--terracotta); }
+
+  /* Feeding table inside match */
+  .feeding-table {
+    width: 100%;
+    margin-top: 0.6rem;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+  }
+  .feeding-table th {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.3rem 0.25rem;
+    text-align: center;
+    border-bottom: 1px solid var(--kraft);
+  }
+  .feeding-table th:first-child { text-align: left; }
+  .feeding-table td {
+    padding: 0.35rem 0.25rem;
+    text-align: center;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .feeding-table td:first-child {
+    text-align: left;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  /* No match state */
+  .no-matches {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+  }
+
+  /* Paw print decoration */
+  .paw {
+    display: inline-block;
+    font-size: 1.2rem;
+    opacity: 0.15;
+    margin: 0 0.25rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --cream: #1c1714;
+      --kraft: #2e261f;
+      --brown: #e8d5c0;
+      --brown-light: #a08a74;
+      --text: #e8dcc8;
+      --text-muted: #6b5b4b;
+      --shadow: rgba(0, 0, 0, 0.25);
+    }
+    .card, .new-food-summary, .match-card { background: #241e18; }
+    input[type="number"] { background: var(--cream); color: var(--text); }
+    .kcal-mode-toggle button { background: #241e18; }
+    .kcal-mode-toggle button.active { background: #c4654a; color: #1c1714; }
+    .stat { background: var(--cream); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Cat Food Calc<span>for Creamy, Mage & Simone</span></h1>
+  </header>
+
+  <div class="card">
+    <div class="card-title">What's on the label?</div>
+
+    <div class="kcal-mode-toggle" id="kcalModeToggle">
+      <button class="active" data-mode="per-oz">kcal/oz</button>
+      <button data-mode="per-kg">kcal/kg</button>
+      <button data-mode="total">total kcal</button>
+    </div>
+
+    <div class="input-row" id="sizeRow" style="display: none;">
+      <div class="input-group full">
+        <label for="size">Can size (oz)</label>
+        <input type="number" id="size" inputmode="decimal" step="0.1" placeholder="5.5">
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group full">
+        <label for="kcal" id="kcalLabel">Kcal per oz</label>
+        <input type="number" id="kcal" inputmode="decimal" step="0.1" placeholder="28" autofocus>
+      </div>
+    </div>
+  </div>
+
+  <div class="results" id="results"></div>
+</div>
+
+<script>
+const CATS = [
+  { name: 'Creamy', calPerDay: 150 },
+  { name: 'Mage', calPerDay: 180 },
+  { name: 'Simone', calPerDay: 125 },
+];
+
+const FOODS = [
+  { name: 'Tiki Tuna', calPerOz: 25.33 },
+  { name: 'Smalls', calPerOz: 40.00 },
+  { name: 'Natural Lamb', calPerOz: 34.33 },
+  { name: 'Weruva Til Then', calPerOz: 26.42 },
+  { name: 'Instinct Rabbit', calPerOz: 28.36 },
+];
+
+let kcalMode = 'per-oz';
+
+// Kcal mode toggle
+document.getElementById('kcalModeToggle').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  kcalMode = btn.dataset.mode;
+  document.querySelectorAll('#kcalModeToggle button').forEach(b => b.classList.toggle('active', b === btn));
+
+  const label = document.getElementById('kcalLabel');
+  const input = document.getElementById('kcal');
+  const sizeRow = document.getElementById('sizeRow');
+
+  if (kcalMode === 'per-oz') {
+    label.textContent = 'Kcal per oz';
+    input.placeholder = '28';
+    sizeRow.style.display = 'none';
+  } else if (kcalMode === 'per-kg') {
+    label.textContent = 'Kcal per kg';
+    input.placeholder = '1000';
+    sizeRow.style.display = 'none';
+  } else {
+    label.textContent = 'Total kcal in can';
+    input.placeholder = '150';
+    sizeRow.style.display = '';
+  }
+  calculate();
+});
+
+// Calculate on any input change
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('input', calculate);
+});
+
+function calculate() {
+  const size = parseFloat(document.getElementById('size').value);
+  const kcalRaw = parseFloat(document.getElementById('kcal').value);
+
+  const resultsEl = document.getElementById('results');
+
+  if (!kcalRaw || kcalRaw <= 0) {
+    resultsEl.classList.remove('visible');
+    return;
+  }
+
+  // Convert everything to cal/oz
+  let calPerOz;
+  if (kcalMode === 'per-oz') {
+    calPerOz = kcalRaw;
+  } else if (kcalMode === 'per-kg') {
+    // kcal/kg -> kcal/oz (1 kg = 35.274 oz)
+    calPerOz = kcalRaw / 35.274;
+  } else {
+    // total kcal in can — need size in oz
+    if (!size || size <= 0) {
+      resultsEl.classList.remove('visible');
+      return;
+    }
+    calPerOz = kcalRaw / size;
+  }
+
+
+  let html = '';
+
+  // Sort by closeness
+  const comparisons = FOODS.map(food => {
+    const diff = Math.abs(calPerOz - food.calPerOz);
+    const pctDiff = (diff / food.calPerOz) * 100;
+    return { ...food, diff, pctDiff };
+  }).sort((a, b) => a.pctDiff - b.pctDiff);
+
+  comparisons.forEach(food => {
+    let matchClass, badgeText;
+    if (food.pctDiff <= 5) {
+      matchClass = 'exact';
+      badgeText = 'Same portions';
+    } else if (food.pctDiff <= 15) {
+      matchClass = 'close';
+      badgeText = `${food.pctDiff.toFixed(0)}% off`;
+    } else {
+      matchClass = 'far';
+      badgeText = `${food.pctDiff.toFixed(0)}% off`;
+    }
+
+    const direction = calPerOz > food.calPerOz ? 'more' : 'fewer';
+
+    let verdict;
+    if (food.pctDiff <= 5) {
+      verdict = `Use the same measurements as ${food.name}.`;
+    } else if (food.pctDiff <= 15) {
+      verdict = `Close to ${food.name} — ${direction} calories per oz, portions would differ slightly.`;
+    } else {
+      verdict = `Quite different from ${food.name} — you'd need new measurements.`;
+    }
+
+    html += `<div class="match-card ${matchClass}">
+      <div class="match-header">
+        <span class="match-name">${food.name}</span>
+        <span class="match-badge">${badgeText}</span>
+      </div>
+      <div class="match-detail"><strong>${food.calPerOz.toFixed(1)}</strong> kcal/oz</div>
+      <div class="match-verdict">${verdict}</div>
+    </div>`;
+  });
+
+  resultsEl.innerHTML = html;
+  resultsEl.classList.add('visible');
+}
+</script>
+</body>
+</html>
